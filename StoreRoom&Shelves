@@ -1,0 +1,116 @@
+Question ->
+
+There were 2 questions in total. I'll update the post with the 2nd question soon! :)
+Question 1:
+A storeroom is used to organize items stored in it on N shelves. Shelves are numbered from 0 to N-1. The K-th shelf is dedicated items of only one type, denoted by a positive integer A[K].
+
+Recently it was decided that it is necessary to free R consecutive shelves. Shelves cannot be reordered. What is the maximum number of types of items which still can be stored in the storeroom after freeing R consecutive shelves?
+
+Examples:
+
+Sample 1:
+
+Input: A = [2, 1, 2, 3, 2, 2], R = 3
+
+Output: 2
+
+Explanation: If we free shelves 2, 3 and 4 (shelves are numbered from 0)
+
+Sample 2:
+
+Input: A = [2, 3, 1, 1, 2], R = 2
+
+Output: 3
+
+Explanation: All three types can still be stored by freeing the last two shelves.
+
+Sample 3:
+
+Input: A = [20, 10, 10, 10, 30, 20], R = 3
+
+Output: 3
+
+Explanation: All three types can still be stored by freeing the first three shelves.
+
+
+CODE ->
+
+
+import java.util.*;
+public class HelloWorld{
+
+     public static void main(String []args){
+
+        int[] arr = new int[]{2, 1, 2, 3, 2, 2};
+        int R = 3;
+        int len = arr.length;
+        HashMap<Integer, Integer> distincts = new HashMap<>();
+        
+        int ans = Integer.MIN_VALUE;
+        
+        for(int i=0;i<len;i++) {
+            if(distincts.containsKey(arr[i])) {
+                distincts.put(arr[i], distincts.get(arr[i])+1);
+            } else {
+                distincts.put(arr[i],1);
+            }
+        }
+       
+        
+        int i=0, j = 0;
+        HashMap<Integer, Integer> windowFreq = new HashMap<>();
+        while(j<len) {
+            
+            int count = 0;
+            
+            if(j-i+1 <= R) {
+                
+            if(windowFreq.containsKey(arr[j])) {
+                windowFreq.put(arr[j], windowFreq.get(arr[j])+1);
+            } else {
+                windowFreq.put(arr[j],1);
+            }
+               
+            }
+            
+            if(j-i+1 == R) {
+                
+
+                for(int x=i;x<=j;x++) {
+                    if(windowFreq.get(arr[x]) < distincts.get(arr[x]) ) {
+                        count++;
+                    } 
+                    
+                }
+                ans = Math.max(ans, distincts.size() - count);
+                windowFreq.put(arr[i], windowFreq.get(arr[i]) - 1);
+                i++;
+            }
+            j++;
+        }
+        
+        System.out.println(ans);
+     }
+}
+
+Another code ->
+
+public int solution(int A[], int R) {
+    int n = A.length;
+    if ( R == n) {
+         return 0;
+    }
+   int ans = 0;
+   for (int i = 0; i < n - R + 1;  i++) {
+        HashSet<Integer> set = new HashSet<>();
+        for (int j = 0; j < n; j++) {
+            if (j >= i || j < i + R) {
+               continue;
+            } else {
+               set.add(A[j);
+            }
+           ans = Math.max(ans, set.size());
+        }
+    }
+   return ans;
+}
